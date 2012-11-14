@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.balatong.zip"
+    android:versionCode="7"
+    android:versionName="0.9.7" >
+
+    <uses-sdk android:minSdkVersion="8" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:xlargeScreens="true" 
+        android:smallScreens="true" 
+        android:resizeable="true"/>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name" >
+        
+        <service 
+            android:name=".service.UnzipperService" >
+        </service>
+
+        <service 
+            android:name=".service.ZipperService" >
+        </service>
+
+        <activity
+            android:name=".view.ViewerActivity"
+            android:label="@string/app_name"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" 
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:mimeType="application/zip" android:scheme="file" />
+                <data android:mimeType="application/rar" android:scheme="file" />
+                <data android:mimeType="application/tar" android:scheme="file" />
+                <data android:mimeType="application/jar" android:scheme="file" />
+                <data android:mimeType="application/war" android:scheme="file" />
+                <data android:mimeType="application/ear" android:scheme="file" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="com.google.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+        
+    </application>
+
+</manifest>
