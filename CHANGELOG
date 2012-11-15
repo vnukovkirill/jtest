@@ -1,0 +1,171 @@
+2.4.1 / 2012-07-26
+
+* Enhancements
+
+  * Support sqlite in sql steps
+  * More accurately detect if a table has been created during a run
+
+2.4.0 / 2012-07-26
+
+* Breaking changes
+
+  * Entirely remove taps support - it doesn't preserve foreign key constraints and adds a lot of complexity
+
+* Enhancements
+
+  * New "sql" step - executes SQL provided as a string OR a local/remote SQL file provided as a URL
+  * Die with a useful error message if a column specified in an import step doesn't exist - thanks @chrisle https://github.com/seamusabshere/data_miner/issues/17
+  * Allow setting :validate => true on import steps - thanks @chrisle https://github.com/seamusabshere/data_miner/issues/18
+
+2.3.4 / 2012-07-06
+
+* Bug fixes
+
+  * Fix silly deadlock
+
+2.3.3 / 2012-07-06
+
+* Bug fixes
+
+  * Always register data miner scripts with DataMiner.model_names or else DataMiner.run won't work as expected - just bad logic before
+
+2.3.2 / 2012-06-25
+
+* Bug fixes
+
+  * Make sure 't', 'true', 1, '1', 'on', 'yes', etc. are treated as true for boolean columns (and 'f', 'false', 'FALSE', etc.)
+
+2.3.1 / 2012-06-22
+
+* Bug fixes
+
+  * Avoid duplicate rows by correctly identifying auto-increment versus non-auto-increment integer primary keys
+  * Properly sort per-row column statistics
+
+2.3.0 / 2012-06-21
+
+* Enhancements
+
+  * Using https://github.com/seamusabshere/upsert to speed up import steps when possible.
+
+2.2.0 / 2012-06-11
+
+* Breaking changes
+
+  * You must specify DataMiner.units_convert = {:alchemist,:conversions}
+
+* Enhancements
+
+  * Swappable unit conversion libraries [@dkastner]
+  * Intelligent parsing of commas and periods in number fields [@ihough]
+
+2.1.2 / 2012-05-22
+
+* Breaking changes
+
+  * DataMiner::Run#column_statistics_for(column_name, period) -> {initial,final}_column_statistics(column_name)
+  * Remove std dev from statistics kept
+
+* Enhancements
+
+  * Added zero count and null count
+
+2.1.1 / 2012-05-16
+
+* Enhancements
+
+  * Keep row counts from before and after runs.
+  * If DataMiner.per_column_statistics?, keep per-column statistics from before and after runs.
+
+2.1.0 / 2012-05-10
+
+* Enhancements
+
+  * Don't use "perform" as a class or instance method name - it can interfere with Resque or Sidekiq.
+  * Don't lock DataMiner::Run#perform. Provide instructions for how people can do this manually.
+
+* Bug fixes
+
+  * Don't blow up trying to get current database name on SQLite3
+
+2.0.3 / 2012-05-07
+
+* Enhancements
+
+  * Rename :nullify to :nullify_blank_strings to clarify that it only affects textual columns and means "treat blank input as null".
+  * Don't try to set units for a column that is currently nil (thanks @ihough)
+
+* Bug fixes
+
+  * Don't blow up if mass-assignment rules are strict.
+  * Don't accidentally set a numeric column to 0.0 when the input is blank or nil.
+
+2.0.2 / 2012-05-04
+
+* Breaking changes
+
+  * Import descriptions are no longer optional
+  * Import options are no longer optional (but then, they never were)
+
+* Enhancements
+
+  * Real documentation!
+  * Make it easier to clear locks with DataMiner::Run.clear_locks
+  * Replace class-level mutexes with simple Thread.exclusive calls
+  * Simplified DataMiner::Dictionary
+
+2.0.1 / 2012-04-18
+
+* Enhancements
+
+  * DataMiner.run -> DataMiner.perform
+  * Some basic tests that don't rely on Earth
+
+* Bug fixes
+
+  * Fix the "call stack" - the thing that keeps infinite loops from occurring
+  * Make sure sources get refreshed every time you re-run data miner
+  * Make sure dictionaries " " " " " " "
+
+2.0.0 / 2012-04-17
+
+* Breaking changes
+
+  * Renamed data_miner_config to data_miner_script (etc. for class/method naming)
+  * Simplify DataMiner.run arguments
+      was: DataMiner.run(:resource_names => ['Country'])
+      now: DataMiner.run(['Country'])
+  * Rename "resources" to "models"
+      was: DataMiner.resource_names
+      now: DataMiner.model_names
+  * Expect procs instead of lambdas (because they are just instance-eval'ed now, Blockenspiel is no longer guessing where to find methods)
+      was: :synthesize => lambda { class_method }
+      now: :synthesize => proc { Klass.class_method }
+  * Use UnicodeUtils to correctly upcase and downcase
+  * Use throw/catch instead of exceptions to signal to force a step to stop successfully
+      was: DataMiner::Succeed
+      now: throw :data_miner_succeed
+  * Import steps no longer accept deprecated :table => RemoteTable or :errata => Errata options
+  * DataMiner::Run structure has changed (in addition to other internals)
+
+* Enhancements
+
+  * Easy to modify data miner scripts using DataMiner::Script#{append|prepend|append_once|prepend_once}
+  * DRYer codebase
+  * No longer depends on Blockenspiel
+  * Uses UnixUtils instead of its own spawning code
+  * Should be threadsafe (no more autoload, has mutexes, more careful/fewer singletons, etc.)
+
+1.1.0
+* fixed dependency issues
+1.0.0
+* bundler and gemspec instead of jeweler
+* clear up memory leaks and destructive argument borking
+* mostly backwards compatible (but no add_hints! in remote_table transforms, for example)
+0.2.6
+* Upgrade to remote_table 0.1.6 to handle UTF-8 CSVs and long urls.
+0.3.0
+* Removed association code... now data_miner focuses on just importing.
+* New, simpler DSL
+* Upgrade to remote_table 0.2.1 for row_hashes and better blank row handling
+* Remove all association-related code
