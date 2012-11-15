@@ -1,14 +1,4 @@
-source :rubygems
+# A sample Gemfile
+source "https://rubygems.org"
 
-gemspec
-
-gem 'conversions'
-
-if RUBY_VERSION >= '1.9'
-  gem 'unicode_utils'
-end
-# if RUBY_VERSION >= '1.9'
-#  gem 'ruby-debug19' # replace with debugger?
-# else
-#   gem 'ruby-debug'
-# end
+# gem "rails"
